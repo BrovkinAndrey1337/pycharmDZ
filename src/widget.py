@@ -1,6 +1,8 @@
 from masks import get_mask_account, get_mask_card_number
+from datetime import datetime
 
 def mask_account_card(account: str)->str:
+    """Функция маскировки аккаунта/счета"""
     masked_number_list = list()
     first_number_index = 0
     for index in range(len(account)):
@@ -16,3 +18,11 @@ def mask_account_card(account: str)->str:
         masked_card_number = get_mask_card_number(masked_number)
         masked_card = account[:first_number_index] + masked_card_number
         return masked_card
+
+
+def get_date(date_string):
+    """Функция преобразования даты"""
+    date_object = datetime.fromisoformat(date_string)
+    formatted_date = date_object.strftime("%d.%m.%Y")
+    return formatted_date
+
