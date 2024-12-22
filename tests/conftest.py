@@ -28,3 +28,13 @@ def invalid_dates():
         "",
         "Люблю_чебупели",
     ]
+
+@pytest.fixture
+def data_state():
+    return [
+        {"id": 1, "state": "EXECUTED", "date": "2023-04-01"},
+        {"id": 2, "state": "EXECUTED", "date": "2021-04-01"},
+        {"id": 3, "state": "EXECUTED", "date": "2022-12-25"},
+        {"id": 4, "state": "PENDING",  "date": "2023-01-15"},
+        {"id": 5, "state": "CANCELLED", "date": "2020-04-01"},
+    ]

@@ -2,7 +2,7 @@ import pytest
 from src.masks import get_mask_card_number, get_mask_account
 from src.widget import mask_account_card, get_date
 from src.processing import filter_by_state, sort_by_date
-from tests.conftest import invalid_dates
+from tests.conftest import invalid_dates, data_state
 
 
 def test_get_mask_card_number(valid_card_numbers):
@@ -59,4 +59,65 @@ def test_get_date_invalid_formats(invalid_dates):
     for invalid_date in invalid_dates:
         with pytest.raises(ValueError):
             get_date(invalid_date)
+
+@pytest.mark.parametrize("state, expected_output_state", [
+    ("EXECUTED", [
+        {"id": 1, "state": "EXECUTED", "date": "2023-04-01"},
+        {"id": 2, "state": "EXECUTED", "date": "2021-04-01"},
+        {"id": 3, "state": "EXECUTED", "date": "2022-12-25"}
+    ]),
+    ("PENDING", [{"id": 4, "state": "PENDING", "date": "2023-01-15"}]),
+    ("CANCELLED", [{"id": 5, "state": "CANCELLED", "date": "2020-04-01"}]),
+    ("NOT_EXIST", []),
+])
+
+def test_filter_by_state(data_state, state, expected_output_state):
+    result = filter_by_state(data_state, state)  # Вызов вашей функции
+    assert result == expected_output_state
+
+@pytest.mark.parametrize("expected_sort_date, descending", [
+    (
+        [
+            {"id": 1, "state": "EXECUTED", "date": "2023-04-01"},
+            {"id": 4, "state": "PENDING",  "date": "2023-01-15"},
+            {"id": 3, "state": "EXECUTED", "date": "2022-12-25"},
+            {"id": 2, "state": "EXECUTED", "date": "2021-04-01"},
+            {"id": 5, "state": "CANCELLED", "date": "2020-04-01"},
+        ],
+        True
+    ),
+    (
+        [
+            {"id": 5, "state": "CANCELLED", "date": "2020-04-01"},
+            {"id": 2, "state": "EXECUTED", "date": "2021-04-01"},
+            {"id": 3, "state": "EXECUTED", "date": "2022-12-25"},
+            {"id": 4, "state": "PENDING",  "date": "2023-01-15"},
+            {"id": 1, "state": "EXECUTED", "date": "2023-04-01"},
+        ],
+        False
+    ),
+])
+
+def test_sort_by_date(data_state, expected_sort_date, descending):
+    assert sort_by_date(data_state, descending) == expected_sort_date
+
+@pytest.mark.parametrize("data_invalid", [
+    [
+        {"id": 1, "state": "EXECUTED", "date": "2023-04-01"},
+        {"id": 2, "state": "EXECUTED", "date": "invalid-date"},
+        {"id": 3, "state": "EXECUTED", "date": "2022-12-25"},
+    ],
+    [
+        {"id": 1, "state": "EXECUTED", "date": "2023-04-01"},
+        {"id": 2, "state": "EXECUTED", "date": "01/04/2023"},
+    ],
+    [
+        {"id": 1, "state": "EXECUTED", "date": "2023-04-01"},
+        {"id": 2, "state": "EXECUTED", "date": "2023-04-31"},
+    ],
+])
+
+def test_sort_by_date_invalid_format(data_invalid):
+    with pytest.raises(ValueError):
+        sort_by_date(data_invalid)
 
