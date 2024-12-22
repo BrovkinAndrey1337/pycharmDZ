@@ -1,5 +1,7 @@
 def get_mask_card_number(card_number: str) -> str:
     """Функция для маскрировки номера карты"""
+    if len(card_number) != 16 or not card_number.isdigit():
+        raise ValueError("Номер карты должен содержать 16 цифр.")
     first_six_numbers = card_number[:6]
     last_four_numbers = card_number[-4:]
     count_of_stars = len(card_number) - 10
@@ -13,6 +15,8 @@ def get_mask_card_number(card_number: str) -> str:
 
 def get_mask_account(account: str) -> str:
     """Функция для маскрировки номера аккаунта"""
+    if len(account) != 20 or not account.isdigit():
+        raise ValueError("Номер счета должен содержать 20 цифр.")
     last_four_numbers = account[-4:]
     masked_account = "*" * 2 + last_four_numbers
     return masked_account
