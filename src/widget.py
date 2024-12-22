@@ -24,6 +24,7 @@ def mask_account_card(account: str) -> str:
         masked_card = account[:first_number_index] + masked_card_number
         return masked_card
 
+
 def get_date(date_string):
     """Функция преобразования даты"""
     if not date_string:
