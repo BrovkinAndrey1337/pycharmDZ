@@ -1,7 +1,7 @@
-from typing import Dict, List, Union
+from typing import Any, Dict, List
 
 
-def filter_by_currency(transactions: List[Dict[str, Union]], currency: str):
+def filter_by_currency(transactions: List[Dict[str, Any]], currency: str):
     """Генератор фильтрует транзакции по заданной валюте"""
     for transaction in transactions:
         if (
