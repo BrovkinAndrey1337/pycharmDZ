@@ -1,4 +1,5 @@
 def log(filename=None):
+    """Декоратор, предназначенный для проверки результатов и ошибок функций"""
     def decorator(func):
         def wrapper(*args, **kwargs):
             error_occured = False
