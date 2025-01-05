@@ -84,7 +84,19 @@ data = [
 filtered_data = filter_by_state(data)
 print(filtered_data)  #Вывод: [{'id': 1, 'name': 'Item 1', 'state': 'EXECUTED'}, {'id': 3, 'name': 'Item 3', 'state': 'EXECUTED'}]
 ```
-
+### Декоратор для проверки функций `log(filename=None)`
+#### Декоратор `log(filename=None)` логирует результаты и ошибки выполнения функций
+Декоратор принимает необязательный аргумент filename, который определяет, куда будут записываться логи (в файл или в консоль):
+Если filename задан, логи записываются в указанный файл. Если filename не задан, логи выводятся в консоль.
+##### Пример использования:
+```python
+from src.decorators import log
+@log()
+def dividing(number_1, number_2):
+    return number_1 / number_2
+print(dividing(10, 2)) #dividing ok
+print(dividing(10, 0)) #dividing error: ZeroDivisionError. Inputs: (10, 0), {}
+```
 # Результаты тестирования
 
 ## Запуск тестов
@@ -96,7 +108,8 @@ print(filtered_data)  #Вывод: [{'id': 1, 'name': 'Item 1', 'state': 'EXECUT
 - src\processing.py	95%
 - src\widget.py	100%
 - src\generators.py	100%
-- Total	99%
+- src\decorators.py 90%
+- Total	97%
 
 ### Результаты тестов
 #### test_masks_filter_datesort.py
@@ -107,6 +120,11 @@ print(filtered_data)  #Вывод: [{'id': 1, 'name': 'Item 1', 'state': 'EXECUT
 #### test_generators.py
 Общее количество тестов: 13
 - Пройдено: 13
+- Провалено: 0
+
+#### test_decorators.py
+Общее количество тестов: 2
+- Пройдено: 2
 - Провалено: 0
 ## Лицензия
 Этот проект является открытым и может быть использован, изменён и распространён в соответствии с условиями лицензии MIT.
