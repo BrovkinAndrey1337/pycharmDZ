@@ -1,6 +1,7 @@
-from logger import setup_logger
+from src.logger import setup_logger
 
-logger = setup_logger('masks')
+logger = setup_logger("masks")
+
 
 def get_mask_card_number(card_number: str) -> str:
     """Функция для маскирования номера карты"""
@@ -11,7 +12,9 @@ def get_mask_card_number(card_number: str) -> str:
         first_six_numbers = card_number[:6]
         last_four_numbers = card_number[-4:]
         count_of_stars = len(card_number) - 10
-        masked_card_number = first_six_numbers + "*" * count_of_stars + last_four_numbers
+        masked_card_number = (
+            first_six_numbers + "*" * count_of_stars + last_four_numbers
+        )
         masked_card_number_list = list(masked_card_number)
         for index in range(4, len(masked_card_number_list), 5):
             masked_card_number_list.insert(index, " ")
@@ -21,6 +24,7 @@ def get_mask_card_number(card_number: str) -> str:
     except Exception as e:
         logger.exception("Ошибка при маскировке номера карты.")
         raise e
+
 
 def get_mask_account(account: str) -> str:
     """Функция для маскирования номера аккаунта"""
