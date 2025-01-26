@@ -20,7 +20,7 @@ def test_convertation_rub():
 def test_convertation_usd(mock_get):
     mock_response = Mock()
     mock_response.raise_for_status.return_value = None
-    mock_response.json.return_value = {'result': 7500.0}  # Возвращаем курс, а не конвертированную сумму
+    mock_response.json.return_value = {'result': 7500.0}
     mock_get.return_value = mock_response
 
     transaction = {
