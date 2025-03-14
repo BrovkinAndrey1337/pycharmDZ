@@ -14,10 +14,14 @@ def test_read_transactions_from_csv():
             "description": ["Transaction 1", "Transaction 2"],
         }
     )
+    expected_result = [
+        {"date": "2023-01-01", "amount": 100, "description": "Transaction 1"},
+        {"date": "2023-01-02", "amount": 200, "description": "Transaction 2"},
+    ]
+
     with patch("pandas.read_csv", return_value=mock_csv_data):
         result = read_transactions_from_csv("test.csv")
-        expected_result = mock_csv_data
-        pd.testing.assert_frame_equal(result, expected_result)
+        assert result == expected_result
 
 
 def test_read_transactions_from_excel():
