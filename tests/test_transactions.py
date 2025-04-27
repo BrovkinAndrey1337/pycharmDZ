@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
-from src.transactions import read_transactions_from_csv, read_transactions_from_excel
+from src.transactions import read_transactions_from_csv, read_transactions_from_excel, filter_transactions
 
 
 def test_read_transactions_from_csv():
@@ -51,3 +51,27 @@ def test_read_transactions_from_excel_exception():
         with pytest.raises(Exception) as excinfo:
             read_transactions_from_excel("test.xlsx")
         assert str(excinfo.value) == "Произошла ошибка при чтении файла: Ошибка чтения"
+
+def test_filter_transactions():
+    transactions = [
+        {'id': 1, 'description': 'Оплата за интернет', 'amount': -100},
+        {'id': 2, 'description': 'Перевод другу', 'amount': -50},
+        {'id': 3, 'description': 'Зарплата за март', 'amount': 1500},
+        {'id': 4, 'description': 'Оплата за мобильный телефон', 'amount': -30},
+    ]
+    result = filter_transactions(transactions, 'оплата')
+    assert len(result) == 2
+    assert all('оплата' in t['description'].lower() for t in result)
+
+    result = filter_transactions(transactions, 'перевод')
+    assert len(result) == 1
+    assert result[0]['description'] == 'Перевод другу'
+
+    result = filter_transactions(transactions, 'покупка')
+    assert len(result) == 0
+
+    with pytest.raises(ValueError, match="Параметр 'transactions' должен быть списком."):
+        filter_transactions({}, 'оплата')
+
+    with pytest.raises(ValueError, match="Параметр 'search_string' должен быть строкой."):
+        filter_transactions(transactions, 123)
