@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
-from src.transactions import read_transactions_from_csv, read_transactions_from_excel, filter_transactions
+from src.transactions import read_transactions_from_csv, read_transactions_from_excel, filter_transactions, categorize_transactions
 
 
 def test_read_transactions_from_csv():
@@ -75,3 +75,38 @@ def test_filter_transactions():
 
     with pytest.raises(ValueError, match="Параметр 'search_string' должен быть строкой."):
         filter_transactions(transactions, 123)
+
+
+def test_categorize_transactions():
+    transactions = [
+        {"description": "Оплата за интернет"},
+        {"description": "Перевод средств"},
+        {"description": "Оплата за мобильную связь"},
+        {"description": "Оплата за интернет"},
+        {"description": "Купля товаров"},
+    ]
+
+    categories = ["Оплата", "Перевод", "Купля"]
+
+    result = categorize_transactions(transactions, categories)
+    assert result == {'Оплата': 3, 'Перевод': 1, 'Купля': 1}
+
+
+def test_empty_transactions():
+    transactions = []
+    categories = ["Оплата", "Перевод", "Купля"]
+
+    result = categorize_transactions(transactions, categories)
+    assert result == {}
+
+
+def test_invalid_transactions_type():
+    with pytest.raises(ValueError, match="transactions должен быть списком словарей"):
+        categorize_transactions("invalid_type", ["Оплата"])
+
+def test_no_matching_categories():
+    transactions = [{"description": "Неизвестная операция"}]
+    categories = ["Оплата", "Перевод", "Купля"]
+
+    result = categorize_transactions(transactions, categories)
+    assert result == {}
