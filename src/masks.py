@@ -6,7 +6,7 @@ logger = setup_logger("masks")
 def get_mask_card_number(card_number: str) -> str:
     """Функция для маскирования номера карты"""
     try:
-        card_number = ''.join(filter(str.isdigit, card_number))
+        card_number = "".join(filter(str.isdigit, card_number))
 
         if len(card_number) != 16:
             logger.error("Неверный номер карты: должен содержать 16 цифр.")
@@ -16,7 +16,7 @@ def get_mask_card_number(card_number: str) -> str:
         last_four_numbers = card_number[-4:]
         count_of_stars = len(card_number) - 10
         masked_card_number = (
-                first_six_numbers + "*" * count_of_stars + last_four_numbers
+            first_six_numbers + "*" * count_of_stars + last_four_numbers
         )
         masked_card_number_list = list(masked_card_number)
 
@@ -34,7 +34,7 @@ def get_mask_card_number(card_number: str) -> str:
 def get_mask_account(account: str) -> str:
     """Функция для маскирования номера аккаунта"""
     try:
-        account = ''.join(filter(str.isdigit, account))
+        account = "".join(filter(str.isdigit, account))
 
         if len(account) != 20:
             logger.error("Неверный номер счета: должен содержать 20 цифр.")
@@ -47,4 +47,3 @@ def get_mask_account(account: str) -> str:
     except Exception as e:
         logger.error(f"Ошибка при маскировке номера аккаунта: {e}", exc_info=True)
         raise e
-
