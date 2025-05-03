@@ -44,6 +44,7 @@ def filter_transactions(transactions: List[Dict], search_string: str) -> List[Di
 
 
 def categorize_transactions(transactions: List[Dict], categories: List):
+    """Функция для подсчета кол-ва операций в каждой категории"""
     if not isinstance(transactions, list):
         raise ValueError("transactions должен быть списком словарей")
 
