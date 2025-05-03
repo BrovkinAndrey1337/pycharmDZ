@@ -6,6 +6,36 @@ from src.transactions import (
     read_transactions_from_excel,
 )
 from src.utils import get_transactions
+from typing import  List, Dict, Any
+from src.masks import get_mask_account, get_mask_card_number
+
+def print_transactions(transactions: List[Dict[str, Any]]):
+    """Выводит транзакции в заданном формате"""
+    for transaction in transactions:
+        date = transaction.get("date").split("T")[0]  # Убираем время
+        description = transaction.get("description")
+        operation_amount = transaction.get("operationAmount", {})
+        currency = operation_amount.get("currency", {}).get("name")
+        amount = operation_amount.get("amount")
+
+        from_account = transaction.get('from')
+        to_account = transaction.get('to')
+
+        if from_account and to_account:
+            from_type = "Счет" if 'Счет' in from_account else from_account.split()[0]
+            masked_from = get_mask_card_number(from_account) if 'Счет' not in from_account else get_mask_account(from_account)
+            to_type = "Счет" if 'Счет' in to_account else to_account.split()[0]
+            masked_to = get_mask_card_number(to_account) if 'Счет' not in to_account else get_mask_account(to_account)
+            print(f"{date} {description}\n{from_type} {masked_from} -> {to_type} {masked_to}\nСумма: {amount} {currency}\n")
+        elif from_account:
+            masked_from = get_mask_card_number(from_account) if 'Счет' not in from_account else get_mask_account(from_account)
+            print(f"{date} {description}\n{masked_from}\nСумма: {amount} {currency}\n")
+        elif to_account:
+            masked_to = get_mask_card_number(to_account) if 'Счет' not in to_account else get_mask_account(to_account)
+            print(f"{date} {description}\n{masked_to}\nСумма: {amount} {currency}\n")
+        else:
+            print(f"{date} {description}\nНет данных о счетах\nСумма: {amount} {currency}\n")
+
 
 if __name__ == "__main__":
     answer_sort_by_date = False
@@ -119,5 +149,6 @@ if __name__ == "__main__":
             continue
 
     print(
-        f"Распечатываю итоговый список транзакций...\nВсего банковских операций в выборке: {len(transactions)}\n{transactions}"
+        f"Распечатываю итоговый список транзакций...\nВсего банковских операций в выборке: {len(transactions)}\n"
     )
+    print_transactions(transactions)
