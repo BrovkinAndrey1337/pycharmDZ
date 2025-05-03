@@ -97,6 +97,21 @@ def dividing(number_1, number_2):
 print(dividing(10, 2)) #dividing ok
 print(dividing(10, 0)) #dividing error: ZeroDivisionError. Inputs: (10, 0), {}
 ```
+### Чтение csv и excel файлов
+#### Функции `def read_transactions_from_csv(file_path: str)` и `def read_transactions_from_excel(file_path: str)`
+
+##### Параметры:
+- path_file: путь к файлу
+##### Возвращаемое значение:
+- Словарь, прочтенный из excel или csv файла
+##### Пример использования:
+```python
+import pandas as pd
+from src.transactions import read_transactions_from_csv
+
+transaction_dict = read_transactions_from_csv("../data/transactions.csv")
+print(transaction_dict)
+```
 # Результаты тестирования
 
 ## Запуск тестов
@@ -109,7 +124,8 @@ print(dividing(10, 0)) #dividing error: ZeroDivisionError. Inputs: (10, 0), {}
 - src\widget.py	100%
 - src\generators.py	100%
 - src\decorators.py 90%
-- Total	97%
+- src\transactions.py 100%
+- Total	96%
 
 ### Результаты тестов
 #### test_masks_filter_datesort.py
@@ -126,5 +142,11 @@ print(dividing(10, 0)) #dividing error: ZeroDivisionError. Inputs: (10, 0), {}
 Общее количество тестов: 2
 - Пройдено: 2
 - Провалено: 0
+
+#### test_transactions.py
+Общее количество тестов: 4
+- Пройдено: 4
+- Провалено: 0
+
 ## Лицензия
 Этот проект является открытым и может быть использован, изменён и распространён в соответствии с условиями лицензии MIT.

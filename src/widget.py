@@ -25,7 +25,7 @@ def mask_account_card(account: str) -> str:
         return masked_card
 
 
-def get_date(date_string):
+def get_date(date_string: str) -> datetime:
     """Функция преобразования даты"""
     if not date_string:
         raise ValueError("Пустая дата")
@@ -41,8 +41,7 @@ def get_date(date_string):
     ]
     for formats in date_formats:
         try:
-            date_object = datetime.strptime(date_string, formats)
-            return date_object.strftime("%d.%m.%Y")
+            return datetime.strptime(date_string, formats)
         except ValueError:
             continue
     raise ValueError("Неверная дата.")

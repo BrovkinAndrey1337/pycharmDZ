@@ -1,5 +1,6 @@
-from datetime import datetime
 from typing import Any, Dict, List, Union
+
+from src.widget import get_date
 
 
 def filter_by_state(
@@ -8,6 +9,8 @@ def filter_by_state(
     """Функция находит список словарей по значению state и возвращает их"""
     filtered_dict_list = []
     for item in list_of_dictionaries:
+        if "state" not in item:
+            continue
         if item["state"] == state:
             filtered_dict_list.append(item)
     return filtered_dict_list
@@ -21,9 +24,9 @@ def sort_by_date(
         date_str = item.get("date")
         if isinstance(date_str, str):
             try:
-                item["date"] = datetime.strptime(date_str, "%Y-%m-%d")
-            except ValueError:
-                raise ValueError("Некорректный формат даты.")
+                item["date"] = get_date(date_str)
+            except ValueError as e:
+                raise ValueError(f"Ошибка преобразования даты: {e}")
         else:
             raise ValueError("Поле 'date' должно быть строкой.")
 
